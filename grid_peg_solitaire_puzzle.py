@@ -56,54 +56,91 @@ class GridPegSolitairePuzzle(Puzzle):
 
         ext = []
 
-        for i in range(0,len(self._marker)+1):
-            for j in range(0, len(i)+1):
-                if self._marker[i][j] == "*":
+        for i in range(0,len(self._marker)):
+            for j in range(0, len(self._marker[i])):
+                if self._marker[i][j] == ".":
 
-                    if i-2 > 0:
-                        if self._marker[i-2][j] == "." and self._marker[i-1][j] == "*":
+                    if (i-2 >= 0) :
+                        if self._marker[i-2][j] == "*" and self._marker[i-1][j] == "*":
+
+                            newlist =[]
+                            for item in self._marker:
+                                newlist.append(item)
 
                             #JUMPING THE TOP
-                            newlist = self._marker
-                            newlist[i][j] = "."
+
+                            newlist[i][j] = "*"
                             newlist[i-1][j] = "."
-                            newlist[i-2][j]= "*"
+                            newlist[i-2][j]= "."
 
-                            ext.append(newlist)
+                            ext.append(GridPegSolitairePuzzle(newlist, self._marker_set))
 
-                    if i+2 < (len(self._marker)-1):
-                        if self._marker[i+2][j] == "." and self._marker[i+1][j] == "*":
+                            newlist[i][j] = "."
+                            newlist[i-1][j] = "*"
+                            newlist[i-2][j] = "*"
+
+
+                    if i+2 <= (len(self._marker)-1):
+                        if self._marker[i+2][j] == "*" and self._marker[i+1][j] == "*":
+
+                            newlist =[]
+                            for item in self._marker:
+                                newlist.append(item)
 
                             #JUMPING THE BOTTOM
-                            newlist = self._marker
-                            newlist[i][j] = "."
+
+                            newlist[i][j] = "*"
                             newlist[i+1][j] = "."
-                            newlist[i+2][j]= "*"
+                            newlist[i+2][j]= "."
 
-                            ext.append(newlist)
+                            ext.append(GridPegSolitairePuzzle(newlist, self._marker_set))
 
-                    if j-2 > 0:
-                        if self._marker[i][j-2] == "." and self._marker[i][j-1] == "*":
+
+                            newlist[i][j] = "."
+                            newlist[i+1][j] = "*"
+                            newlist[i+2][j] = "*"
+
+
+                    if j-2 >= 0:
+                        if self._marker[i][j-2] == "*" and self._marker[i][j-1] == "*":
+
+                            newlist =[]
+                            for item in self._marker:
+                                newlist.append(item)
 
                             #JUMPING THE LEFT
-                            newlist = self._marker
-                            newlist[i][j] = "."
+
+                            newlist[i][j] = "*"
                             newlist[i][j-1] = "."
+                            newlist[i][j-2]= "."
+
+                            ext.append(GridPegSolitairePuzzle(newlist, self._marker_set))
+
+                            newlist[i][j] = "."
+                            newlist[i][j-1] = "*"
                             newlist[i][j-2]= "*"
 
-                            ext.append(newlist)
 
+                    if j+2 <= (len(self._marker[i])-1):
+                        if self._marker[i][j+2] == "*" and self._marker[i][j+1] == "*":
 
-                    if j+2 < (len(i)-1):
-                        if self._marker[i][j+2] == "." and self._marker[i][j+1] == "*":
+                            newlist =[]
+                            for item in self._marker:
+                                newlist.append(item)
 
                             #JUMPING THE RIGHT
-                            newlist = self._marker
-                            newlist[i][j] = "."
+
+                            newlist[i][j] = "*"
                             newlist[i][j+1] = "."
+                            newlist[i][j+2]= "."
+
+                            ext.append(GridPegSolitairePuzzle(newlist, self._marker_set))
+
+                            newlist[i][j] = "."
+                            newlist[i][j+1] = "*"
                             newlist[i][j+2]= "*"
 
-                            ext.append(newlist)
+
 
         return ext
 
@@ -115,13 +152,22 @@ class GridPegSolitairePuzzle(Puzzle):
     def is_solved(self):
         peg = 0
 
-        for i in range(0,len(self._marker)+1):
-            for j in range(0, len(i)+1):
+        for i in range(0,len(self._marker)):
+            for j in range(0, len(self._marker[i])):
                 if self._marker[i][j] == "*":
                     peg += 1
                 if peg > 1:
                     return False
         return True
+        '''
+        for i in self._marker:
+            for char in i:
+                if char == "*":
+                    peg = peg + 1
+        if peg > 1:
+            return False
+        return True
+        '''
 
 
 if __name__ == "__main__":
@@ -136,10 +182,14 @@ if __name__ == "__main__":
             ["*", "*", ".", "*", "*"],
             ["*", "*", "*", "*", "*"]]
     gpsp = GridPegSolitairePuzzle(grid, {"*", ".", "#"})
+
+
     import time
 
     start = time.time()
+
     solution = depth_first_solve(gpsp)
+
     end = time.time()
     print("Solved 5x5 peg solitaire in {} seconds.".format(end - start))
     print("Using depth-first: \n{}".format(solution))

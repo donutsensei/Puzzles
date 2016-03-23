@@ -25,6 +25,8 @@ class MNPuzzle(Puzzle):
         self.n, self.m = len(from_grid), len(from_grid[0])
         self.from_grid, self.to_grid = from_grid, to_grid
 
+
+
     # TODO
     # implement __eq__ and __str__
     # __repr__ is up to you
@@ -47,40 +49,41 @@ class MNPuzzle(Puzzle):
         ext = []
 
         for i in range(0, len(self.from_grid) + 1):
-            for j in range(0, len(i) + 1):
+            for j in range(0, len(self.from_grid[i])):
                 if self.from_grid[i][j] == "*":
 
                     #SWITCHING WITH THE LEFT
-                    newlist = self.from_grid
-                    store = newlist[i][j]
-                    newlist[i][j] = newlist[i][j-1]
-                    newlist[i][j-1]= store
+                    newList = self.from_grid
+                    store = newList[i][j]
+                    new = newList[i][j-1]
+                    newList[i][j] = new
+                    newList[i][j-1]= store
 
-                    ext.append(newlist)
+                    ext.append(MNPuzzle(newList, self.to_grid))
 
                     #SWITCHING WITH THE RIGHT
-                    newlist = self.from_grid
-                    store = newlist[i][j]
-                    newlist[i][j] = newlist[i][j+1]
-                    newlist[i][j+1]= store
+                    newList = self.from_grid
+                    store = newList[i][j]
+                    newList[i][j] = newList[i][j+1]
+                    newList[i][j+1]= store
                     
-                    ext.append(newlist)
+                    ext.append(MNPuzzle(newList, self.to_grid))
 
                     #SWITCHING WITH THE TOP
-                    newlist = self.from_grid
-                    store = newlist[i][j]
-                    newlist[i][j] = newlist[i-1][j]
-                    newlist[i-1][j]= store
+                    newList = self.from_grid
+                    store = newList[i][j]
+                    newList[i][j] = newList[i-1][j]
+                    newList[i-1][j]= store
 
-                    ext.append(newlist)
+                    ext.append(MNPuzzle(newList, self.to_grid))
 
                     #SWITCHING WITH THE BOTTOM
-                    newlist = self.from_grid
-                    store = newlist[i][j]
-                    newlist[i][j] = newlist[i+1][j]
-                    newlist[i+1][j]= store
+                    newList = self.from_grid
+                    store = newList[i][j]
+                    newList[i][j] = newList[i+1][j]
+                    newList[i+1][j]= store
 
-                    ext.append(newlist)
+                    ext.append(MNPuzzle(newList, self.to_grid))
 
         return ext
 

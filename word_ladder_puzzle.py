@@ -49,20 +49,19 @@ class WordLadderPuzzle(Puzzle):
         ext = []
         error_count = 0
 
-        for word in self.ws:
-            if len(word) == len(self.from_word):
-                for i in range(0,len(word)+1):
-                    if word[i] != self.from_word[i]:
-                        if word[i] in self._chars:
+        for word in self._word_set:
+            if len(word) == len(self._from_word):
+                for i in range(0,len(word)):
+                    if word[i] != self._from_word[i]:
 
-                            error_count += 1
+                        error_count += 1
 
                     if error_count == 1:
-                        ext.append(word)
+                        ext.append(WordLadderPuzzle(word, self._to_word, self._word_set))
         if len(ext) > 0:
             return ext
 
-        return ("There are no possible extensions")
+        return (None)
 
 
 
@@ -73,7 +72,7 @@ class WordLadderPuzzle(Puzzle):
 
     def is_solved(self):
 
-        return (self.from_word == self.to_word)
+        return (self._from_word == self._to_word)
 
 
 if __name__ == '__main__':
@@ -86,6 +85,7 @@ if __name__ == '__main__':
     w = WordLadderPuzzle("same", "cost", word_set)
     start = time()
     sol = breadth_first_solve(w)
+    #####
     end = time()
     print("Solving word ladder from same->cost")
     print("...using breadth-first-search")
